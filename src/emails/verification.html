@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Verify Your Email</title>
+    <style>
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        background-color: #f8fafc;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+      .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        margin: 40px auto;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e2e8f0;
+      }
+      h1 {
+        color: #0f172a;
+        font-size: 24px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      p {
+        color: #334155;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      .button-container {
+        text-align: center;
+        margin: 32px 0;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 32px;
+        background-color: #0d9488;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: background-color 0.2s;
+      }
+      .button:hover {
+        background-color: #0f766e;
+      }
+      .link-box {
+        background-color: #f1f5f9;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 32px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        font-size: 14px;
+        color: #64748b;
+        text-align: center;
+      }
+      .link-box a {
+        color: #0d9488;
+        text-decoration: none;
+      }
+      .link-box a:hover {
+        text-decoration: underline;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 32px;
+        font-size: 14px;
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Verify Your Email Address</h1>
+      <p>Hi there,</p>
+      <p>
+        Please verify your email address to complete your registration.
+        Click the button below to confirm your email:
+      </p>
+      <div class="button-container">
+        <a href="${url}${callbackUrl}" class="button">Verify Email</a>
+      </div>
+      <p>If the button doesn’t work, copy and paste the link below into your browser:</p>
+      <div class="link-box">
+        <a href="${url}${callbackUrl}">${url}${callbackUrl}</a>
+      </div>
+    </div>
+  </body>
+</html>

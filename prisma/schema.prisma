@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client"
+  output = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id               String            @id
+  name             String
+  email            String            @unique
+  emailVerified    Boolean           @default(false)
+  image            String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @default(now()) @updatedAt
+  accounts         Account[]
+  bookmarks        Bookmark[]
+  notes            Note[]
+  readingHistory   ReadingHistory[]
+  readingPlans     ReadingPlan[]
+  sessions         Session[]
+  userAchievements UserAchievement[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
+}
+
+
+model ReadingHistory {
+  id         String   @id @default(cuid())
+  userId     String
+  pageId     Int
+  surahId    Int
+  surahName  String
+  juzNumber  Int
+  ayahNumber Int?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@map("readingHistory")
+}
+
+model Achievement {
+  id               String            @id @default(cuid())
+  name             String
+  slug             String            @unique
+  description      String?
+  icon             String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  userAchievements UserAchievement[]
+
+  @@map("achievement")
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime    @default(now())
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+
+  @@unique([userId, achievementId])
+  @@map("userAchievement")
+}
+
+model ReadingPlan {
+  id            String              @id @default(cuid())
+  userId        String
+  title         String
+  icon          String
+  filter        ReadingPlanFilter
+  frequency     ReadingPlanFrequency
+  amount        Int?
+  customDay     Int?
+  chapterId     Int?
+  chapterName   String?
+  chapterPages  String?
+
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  user          User                @relation(fields: [userId], references: [id])
+  
+  @@map("readingPlan")
+}
+
+enum ReadingPlanFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  CUSTOM_DAY
+}
+
+enum ReadingPlanFilter {
+  AYAH
+  PAGE
+  JUZ
+  SURAH
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  userId     String
+  ayahId     Int
+  pageId     Int
+  content    String
+  surahName  String
+  ayahNumber Int
+  color      String?  @default("yellow")
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("note")
+}
+
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  pageId     Int
+  surahName  String
+  title      String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pageId])
+  @@map("bookmark")
+}
